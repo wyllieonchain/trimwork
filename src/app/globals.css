@@ -1,26 +1,88 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /* Brand colors */
+  --color-forest: var(--forest);
+  --color-forest-light: var(--forest-light);
+  --color-forest-dark: var(--forest-dark);
+  --color-sage: var(--sage);
+  --color-cream: var(--cream);
+  --color-parchment: var(--parchment);
+  --color-stone: var(--stone);
+  --color-bark: var(--bark);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --radius: 0.5rem;
+
+  /* Earthy green palette */
+  --forest: oklch(0.32 0.09 150);
+  --forest-light: oklch(0.45 0.1 148);
+  --forest-dark: oklch(0.22 0.07 152);
+  --sage: oklch(0.62 0.07 148);
+  --cream: oklch(0.97 0.012 85);
+  --parchment: oklch(0.93 0.018 85);
+  --stone: oklch(0.5 0.015 60);
+  --bark: oklch(0.38 0.025 55);
+
+  /* shadcn tokens mapped to brand */
+  --background: oklch(0.97 0.012 85);       /* cream */
+  --foreground: oklch(0.2 0.02 55);          /* near-black warm */
+  --card: oklch(0.97 0.012 85);
+  --card-foreground: oklch(0.2 0.02 55);
+  --popover: oklch(0.97 0.012 85);
+  --popover-foreground: oklch(0.2 0.02 55);
+  --primary: oklch(0.32 0.09 150);           /* forest */
+  --primary-foreground: oklch(0.97 0.012 85);
+  --secondary: oklch(0.93 0.018 85);         /* parchment */
+  --secondary-foreground: oklch(0.32 0.09 150);
+  --muted: oklch(0.93 0.018 85);
+  --muted-foreground: oklch(0.5 0.015 60);
+  --accent: oklch(0.62 0.07 148);            /* sage */
+  --accent-foreground: oklch(0.22 0.07 152);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.88 0.018 80);
+  --input: oklch(0.88 0.018 80);
+  --ring: oklch(0.45 0.1 148);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+  }
 }
