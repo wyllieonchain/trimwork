@@ -1,104 +1,199 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { FadeIn, SectionCTA, Nav, Footer, BookCTA } from "./components";
 
-const NAV_LINKS = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Why now", href: "#why-now" },
-];
+/* ─── Data ─── */
 
-const PROBLEMS = [
+const CAPABILITIES = [
   {
-    stat: "60%",
-    label: "of partner time",
-    detail: "lost to low-value administrative work",
+    title: "Tax return prep",
+    desc: "Gathers source docs, populates workpapers, and organizes everything into review-ready packages for your senior staff.",
   },
   {
-    stat: "3–4×",
-    label: "longer close cycles",
-    detail: "than they should be, due to manual reconciliation",
+    title: "Document collection",
+    desc: "Pulls W-2s, 1099s, K-1s, and receipts from email, portals, and shared drives. Follows up on what's missing.",
   },
   {
-    stat: "$40k+",
-    label: "per staff member",
-    detail: "in overhead that AI can systematically reduce",
-  },
-];
-
-const HOW_IT_WORKS = [
-  {
-    number: "01",
-    title: "Audit your workflow",
-    body: "We map where time is actually going — across billing, prep, review, and client comms.",
+    title: "Data entry",
+    desc: "Reads bank feeds, brokerage statements, and scanned docs. Enters numbers into your workpapers. No manual keying.",
   },
   {
-    number: "02",
-    title: "Identify leverage points",
-    body: "Not every task is a candidate. We find the 20% of work driving 80% of margin drag.",
+    title: "Client communication",
+    desc: "Sends status updates, deadline reminders, and document requests in your firm's voice. Logs every interaction.",
   },
   {
-    number: "03",
-    title: "Deploy targeted AI",
-    body: "Purpose-built automations that fit inside your existing stack. No rip-and-replace.",
+    title: "Workpaper organization",
+    desc: "Sorts, labels, and files every document into the right client folder. Organized and review-ready from day one.",
+  },
+  {
+    title: "Deadline tracking",
+    desc: "Monitors filing deadlines across your entire client list and flags what needs attention before it's too late.",
   },
 ];
 
-function FadeIn({
-  children,
-  delay = 0,
-  className = "",
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+const INTEGRATIONS = [
+  { name: "Drake", logo: "/logos/drake.svg" },
+  { name: "UltraTax", logo: "/logos/ultratax.svg" },
+  { name: "Lacerte", logo: "/logos/lacerte.svg" },
+  { name: "QuickBooks", logo: "/logos/quickbooks.svg" },
+  { name: "Xero", logo: "/logos/xero.svg" },
+  { name: "Gmail", logo: "/logos/gmail.svg" },
+  { name: "Outlook", logo: "/logos/outlook.svg" },
+  { name: "Google Drive", logo: "/logos/googledrive.svg" },
+  { name: "Excel", logo: "/logos/excel.svg" },
+  { name: "Slack", logo: "/logos/slack.svg" },
+  { name: "Dropbox", logo: "/logos/dropbox.svg" },
+  { name: "Zapier", logo: "/logos/zapier.svg" },
+];
+
+/* ─── Hero Terminal ─── */
+
+const TERMINAL_TASKS = [
+  { label: "Pulling 1099-NEC from client email", status: "done" },
+  { label: "Pulling 1099-K from payment processor", status: "done" },
+  { label: "Flagging missing expense receipts for Q3", status: "flag" },
+  { label: "Sending document request to client", status: "done" },
+  { label: "Sorting receipts into expense categories", status: "done" },
+  { label: "Extracting income from 1099s", status: "done" },
+  { label: "Cross-referencing bank deposits to reported income", status: "done" },
+  { label: "Populating Schedule C workpaper", status: "done" },
+  { label: "Packaging return for senior review", status: "active" },
+];
+
+function HeroTerminal() {
+  const [cycle, setCycle] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (visibleCount >= TERMINAL_TASKS.length) {
+      const timeout = setTimeout(() => {
+        setCycle((c) => c + 1);
+        setVisibleCount(0);
+      }, 2500);
+      return () => clearTimeout(timeout);
+    }
+
+    const timeout = setTimeout(() => {
+      setVisibleCount((c) => c + 1);
+    }, 1400);
+    return () => clearTimeout(timeout);
+  }, [visibleCount, cycle]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [visibleCount]);
+
+  const tasks = TERMINAL_TASKS.slice(0, visibleCount);
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <div className="bg-[var(--parchment)] rounded-2xl shadow-xl shadow-[var(--forest)]/8 border border-border overflow-hidden">
+      {/* Header bar */}
+      <div className="flex items-center gap-3 px-5 py-3.5 bg-background border-b border-border">
+        <div className="flex gap-1.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--stone)]/20" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--stone)]/20" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[var(--stone)]/20" />
+        </div>
+        <div className="flex items-center gap-2 ml-1">
+          <motion.span
+            animate={{ opacity: [1, 0.4, 1] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="w-2 h-2 rounded-full bg-[var(--sage)]"
+          />
+          <span className="text-xs text-[var(--stone)]/60 font-medium">Trimwork is working...</span>
+        </div>
+      </div>
+
+      {/* Task list */}
+      <div className="relative h-[340px]">
+        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[var(--parchment)] to-transparent z-10 pointer-events-none" />
+        <div ref={scrollRef} className="px-5 py-5 h-full overflow-y-auto scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        {tasks.map((task, i) => {
+          const isLast = i === tasks.length - 1;
+          const isActive = isLast && task.status === "active";
+          return (
+            <motion.div
+              key={`${cycle}-${i}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className={`flex items-center gap-3 py-2.5 ${
+                !isLast ? "border-b border-border/50" : ""
+              }`}
+            >
+              {/* Icon */}
+              <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center">
+                {task.status === "done" && (
+                  <div className="w-5 h-5 rounded-full bg-[var(--forest)]/10 flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M2.5 6.5l2 2 5-5" stroke="var(--forest)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                )}
+                {task.status === "flag" && (
+                  <div className="w-5 h-5 rounded-full bg-amber-500/10 flex items-center justify-center">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M6 3v4M6 9v.5" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                )}
+                {task.status === "active" && (
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                    className="w-5 h-5 rounded-full bg-[var(--sage)]/20 flex items-center justify-center"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-[var(--sage)]" />
+                  </motion.div>
+                )}
+              </div>
+
+              {/* Label */}
+              <span className={`text-sm leading-snug ${
+                task.status === "done" ? "text-[var(--stone)]/70" :
+                task.status === "flag" ? "text-amber-700 font-medium" :
+                "text-[var(--forest-dark)] font-medium"
+              }`}>
+                {task.label}
+              </span>
+
+              {/* Status badge */}
+              <span className={`ml-auto text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${
+                task.status === "done" ? "bg-[var(--forest)]/8 text-[var(--forest)]/60" :
+                task.status === "flag" ? "bg-amber-100 text-amber-700" :
+                "bg-[var(--sage)]/15 text-[var(--forest)]"
+              }`}>
+                {task.status === "done" ? "Done" :
+                 task.status === "flag" ? "Flagged" :
+                 isActive ? "In progress" : "Done"}
+              </span>
+            </motion.div>
+          );
+        })}
+        </div>
+      </div>
+    </div>
   );
 }
+
+/* ─── Page ─── */
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <header className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 py-5 bg-background/80 backdrop-blur-md border-b border-border/50">
-        <span className="text-base font-semibold tracking-tight text-[var(--forest)]">
-          Trimwork
-        </span>
-        <nav className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-sm text-[var(--stone)] hover:text-[var(--forest)] transition-colors"
-            >
-              {l.label}
-            </a>
-          ))}
-        </nav>
-        <a
-          href="#book"
-          className="text-sm font-medium px-4 py-2 rounded-full bg-[var(--forest)] text-[var(--cream)] hover:bg-[var(--forest-dark)] transition-colors"
-        >
-          Book a call
-        </a>
-      </header>
+      <Nav />
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-6 pt-24 pb-16 overflow-hidden">
-        {/* Subtle radial gradient */}
+      <section className="relative min-h-screen px-4 sm:px-6 pt-24 sm:pt-28 pb-16 overflow-hidden flex items-center">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
@@ -108,199 +203,176 @@ export default function Home() {
           }}
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative max-w-3xl mx-auto"
-        >
-          <div className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 rounded-full border border-[var(--sage)]/40 bg-[var(--sage)]/10 text-[var(--forest)] text-xs font-medium tracking-wide uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--sage)] inline-block" />
-            Early access — limited spots
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-semibold leading-[1.07] tracking-tight text-[var(--forest-dark)] mb-6">
-            10% more margin.
-            <br />
-            <span className="text-[var(--forest-light)]">No new headcount.</span>
-          </h1>
-
-          <p className="text-lg md:text-xl text-[var(--stone)] leading-relaxed max-w-xl mx-auto mb-10">
-            Trimwork helps accounting firms cut the overhead that AI can handle —
-            so your team spends time on work only humans can do.
-          </p>
-
-          <a
-            href="#book"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[var(--forest)] text-[var(--cream)] font-medium text-base hover:bg-[var(--forest-dark)] transition-all hover:shadow-lg hover:shadow-[var(--forest)]/20 hover:-translate-y-0.5"
-          >
-            Book a discovery call
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              className="opacity-70"
-            >
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </a>
-        </motion.div>
-
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-[var(--stone)]/50"
-        >
-          <span className="text-xs tracking-widest uppercase">Scroll</span>
+        <div className="relative max-w-6xl mx-auto w-full grid md:grid-cols-[3fr_2fr] gap-12 md:gap-16 items-center">
+          {/* Left — copy */}
           <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path
-                d="M7 2v10M3 8l4 4 4-4"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <div className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 rounded-full border border-[var(--sage)]/40 bg-[var(--sage)]/10 text-[var(--forest)] text-xs font-medium tracking-wide uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--sage)] inline-block" />
+              Free 1 month trial
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.07] tracking-tight mb-6">
+              <span className="text-[var(--forest-dark)]">The best Junior Accountant on Earth</span>
+              <br />
+              <span className="text-[var(--forest-light)]">Works for free.</span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-[var(--stone)] leading-relaxed max-w-xl mb-10">
+              We build AI junior tax accountants custom-fit to your firm.
+              They handle the prep work so your senior staff can focus on advisory.
+            </p>
+
+            <SectionCTA />
           </motion.div>
-        </motion.div>
+
+          {/* Right — animated terminal */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden md:block"
+          >
+            <HeroTerminal />
+          </motion.div>
+        </div>
       </section>
 
-      {/* Problem stats */}
-      <section className="py-24 px-6 bg-[var(--parchment)]">
+      {/* Capabilities */}
+      <section className="py-16 sm:py-28 px-4 sm:px-6 bg-[var(--forest-dark)] text-[var(--cream)]">
         <div className="max-w-5xl mx-auto">
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-widest text-[var(--sage)] mb-12 text-center">
-              The margin problem
+            <p className="text-xs font-medium uppercase tracking-widest text-[var(--sage)] mb-4 text-center">
+              What your AI Junior Accountant does
+            </p>
+            <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-4 text-center">
+              Everything a junior does, without the overhead.
+            </h2>
+            <p className="text-lg text-[var(--cream)]/60 mb-16 max-w-2xl mx-auto leading-relaxed text-center">
+              From document collection to return prep, your AI junior accountant handles the full lifecycle. Your senior staff picks up where judgment begins.
             </p>
           </FadeIn>
-          <div className="grid md:grid-cols-3 gap-px bg-border rounded-2xl overflow-hidden">
-            {PROBLEMS.map((p, i) => (
-              <FadeIn key={p.stat} delay={i * 0.1}>
-                <div className="bg-[var(--parchment)] p-10 flex flex-col gap-2">
-                  <span className="text-5xl font-semibold text-[var(--forest)] tracking-tight">
-                    {p.stat}
-                  </span>
-                  <span className="text-sm font-medium text-[var(--bark)]">
-                    {p.label}
-                  </span>
-                  <p className="text-sm text-[var(--stone)] leading-relaxed mt-1">
-                    {p.detail}
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {CAPABILITIES.map((cap, i) => (
+              <FadeIn key={cap.title} delay={i * 0.07}>
+                <div className="bg-[var(--cream)]/5 border border-[var(--cream)]/10 rounded-2xl p-7 h-full transition-all duration-300 hover:bg-[var(--cream)]/10 hover:border-[var(--sage)]/30 hover:scale-[1.03] hover:shadow-lg hover:shadow-[var(--sage)]/10 cursor-default group">
+                  <h3 className="text-base font-semibold text-[var(--cream)] mb-2">
+                    {cap.title}
+                  </h3>
+                  <p className="text-sm text-[var(--cream)]/60 leading-relaxed transition-colors duration-300 group-hover:text-[var(--cream)]/80">
+                    {cap.desc}
                   </p>
                 </div>
               </FadeIn>
             ))}
           </div>
+
+          <FadeIn delay={0.3}>
+            <div className="mt-12 text-center">
+              <SectionCTA text="See how it works" href="/how-it-works" variant="light" />
+            </div>
+          </FadeIn>
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" className="py-28 px-6">
-        <div className="max-w-4xl mx-auto">
+      {/* Comparison strip */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-[var(--parchment)]">
+        <div className="max-w-5xl mx-auto">
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-widest text-[var(--sage)] mb-4">
-              How it works
+            <p className="text-xs font-medium uppercase tracking-widest text-[var(--sage)] mb-4 text-center">
+              By the numbers
             </p>
-            <h2 className="text-3xl md:text-5xl font-semibold text-[var(--forest-dark)] mb-16 max-w-lg leading-tight">
-              Simple process. Measurable result.
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-semibold text-[var(--forest-dark)] leading-tight mb-10 sm:mb-16 text-center">
+              Junior hire vs. AI Junior Accountant
             </h2>
           </FadeIn>
 
-          <div className="flex flex-col gap-0 divide-y divide-border">
-            {HOW_IT_WORKS.map((step, i) => (
-              <FadeIn key={step.number} delay={i * 0.12}>
-                <div className="flex items-start gap-8 py-10 group">
-                  <span className="text-xs font-mono text-[var(--sage)] pt-1 min-w-[2rem]">
-                    {step.number}
-                  </span>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-[var(--forest-dark)] mb-2 group-hover:text-[var(--forest)] transition-colors">
-                      {step.title}
-                    </h3>
-                    <p className="text-[var(--stone)] leading-relaxed">
-                      {step.body}
-                    </p>
-                  </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <FadeIn delay={0.05}>
+              <div className="bg-background border border-border rounded-2xl p-5 sm:p-8">
+                <h3 className="text-sm font-semibold text-[var(--stone)]/50 mb-6 uppercase tracking-wide">Traditional junior hire</h3>
+                <ul className="space-y-4 text-[var(--stone)] text-sm">
+                  <li className="flex justify-between"><span>Annual cost</span><span className="font-semibold text-[var(--forest-dark)]">$65-80k+</span></li>
+                  <li className="flex justify-between"><span>Time to productivity</span><span className="font-semibold text-[var(--forest-dark)]">3-6 months</span></li>
+                  <li className="flex justify-between"><span>Availability (tax season)</span><span className="font-semibold text-[var(--forest-dark)]">50-60 hrs/wk</span></li>
+                  <li className="flex justify-between"><span>Data entry</span><span className="font-semibold text-[var(--forest-dark)]">Manual</span></li>
+                  <li className="flex justify-between"><span>Document follow-up</span><span className="font-semibold text-[var(--forest-dark)]">When they remember</span></li>
+                  <li className="flex justify-between"><span>Turnover risk</span><span className="font-semibold text-[var(--forest-dark)]">High</span></li>
+                </ul>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.15}>
+              <div className="bg-[var(--forest)]/5 border border-[var(--forest)]/15 rounded-2xl p-5 sm:p-8">
+                <div className="flex items-center gap-2 mb-6">
+                  <Image src="/dark_no_bg.png" alt="Trimwork" width={24} height={24} />
+                  <span className="text-sm font-display font-bold text-[var(--forest)] tracking-tight">Trimwork</span>
                 </div>
-              </FadeIn>
-            ))}
+                <ul className="space-y-4 text-[var(--stone)] text-sm">
+                  <li className="flex justify-between"><span>First month</span><span className="font-semibold text-[var(--forest)]">Free</span></li>
+                  <li className="flex justify-between"><span>Time to productivity</span><span className="font-semibold text-[var(--forest)]">1-2 weeks</span></li>
+                  <li className="flex justify-between"><span>Availability</span><span className="font-semibold text-[var(--forest)]">24/7/365</span></li>
+                  <li className="flex justify-between"><span>Data entry</span><span className="font-semibold text-[var(--forest)]">Automated with validation</span></li>
+                  <li className="flex justify-between"><span>Document follow-up</span><span className="font-semibold text-[var(--forest)]">Automatic, every time</span></li>
+                  <li className="flex justify-between"><span>Turnover risk</span><span className="font-semibold text-[var(--forest)]">None</span></li>
+                </ul>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* Why now */}
-      <section
-        id="why-now"
-        className="py-28 px-6 bg-[var(--forest-dark)] text-[var(--cream)]"
-      >
-        <div className="max-w-4xl mx-auto">
+      {/* Integrations */}
+      <section className="py-16 sm:py-28 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto text-center">
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-widest text-[var(--sage)] mb-8">
-              Why now
+            <p className="text-xs font-medium uppercase tracking-widest text-[var(--sage)] mb-4">
+              Integrates with your stack
+            </p>
+            <h2 className="text-3xl md:text-5xl font-semibold text-[var(--forest-dark)] mb-4 leading-tight">
+              Works with the tools your firm already runs.
+            </h2>
+            <p className="text-lg text-[var(--stone)] mb-16 max-w-xl mx-auto leading-relaxed">
+              Tax prep software, accounting platforms, email, file storage. Your AI junior accountant plugs in without changing how your team works.
             </p>
           </FadeIn>
-          <FadeIn delay={0.1}>
-            <h2 className="text-3xl md:text-5xl font-semibold leading-tight mb-8 max-w-2xl">
-              The firms that move first will own the clients that stay longest.
-            </h2>
-          </FadeIn>
-          <FadeIn delay={0.2}>
-            <p className="text-lg text-[var(--cream)]/70 leading-relaxed max-w-xl">
-              AI in professional services is no longer experimental. It&apos;s
-              operational. The question isn&apos;t whether to adopt it — it&apos;s
-              whether you do it thoughtfully before your competitors do it at all.
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-5 sm:gap-8 items-center justify-items-center">
+            {INTEGRATIONS.map((integration, i) => (
+              <FadeIn key={integration.name} delay={i * 0.05}>
+                <div className="flex flex-col items-center gap-3 group">
+                  <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-[var(--parchment)] group-hover:bg-[var(--forest)]/5 transition-all">
+                    <Image
+                      src={integration.logo}
+                      alt={integration.name}
+                      width={28}
+                      height={28}
+                      className="opacity-80 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                  <span className="text-xs text-[var(--stone)] font-medium">
+                    {integration.name}
+                  </span>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+
+          <FadeIn delay={0.3}>
+            <p className="mt-12 text-sm text-[var(--stone)]/70">
+              Plus thousands more via Zapier. If it has an API, we can connect it.
             </p>
           </FadeIn>
         </div>
       </section>
 
-      {/* CTA / Book */}
-      <section id="book" className="py-32 px-6">
-        <div className="max-w-2xl mx-auto text-center">
-          <FadeIn>
-            <h2 className="text-4xl md:text-5xl font-semibold text-[var(--forest-dark)] mb-5 leading-tight">
-              Let&apos;s talk about your firm.
-            </h2>
-            <p className="text-lg text-[var(--stone)] mb-10 leading-relaxed">
-              A 30-minute call. No pitch deck. Just an honest conversation about
-              where AI can move the needle for you.
-            </p>
-            <a
-              href="https://cal.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--forest)] text-[var(--cream)] font-medium text-base hover:bg-[var(--forest-dark)] transition-all hover:shadow-xl hover:shadow-[var(--forest)]/25 hover:-translate-y-0.5"
-            >
-              Book a free 30-min call
-            </a>
-            <p className="mt-6 text-xs text-[var(--stone)]/60">
-              No commitment. No sales pressure.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border py-8 px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-        <span className="text-sm font-medium text-[var(--forest)]">
-          Trimwork
-        </span>
-        <p className="text-xs text-[var(--stone)]/60">
-          © {new Date().getFullYear()} Trimwork. All rights reserved.
-        </p>
-      </footer>
+      {/* Book CTA */}
+      <BookCTA />
+      <Footer />
     </div>
   );
 }
