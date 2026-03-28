@@ -28,13 +28,13 @@ export const metadata: Metadata = {
     url: "https://trimwork.org",
     siteName: "Trimwork",
     type: "website",
-    images: [{ url: "/dark_w_bg.png", width: 1200, height: 630, alt: "Trimwork" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Trimwork" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Trimwork — AI Junior Accountants for Your Firm",
     description: "We build AI junior tax accountants custom-fit to your firm. First month free.",
-    images: ["/dark_w_bg.png"],
+    images: ["/og.png"],
   },
   robots: {
     index: true,
