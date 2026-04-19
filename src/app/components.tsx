@@ -102,7 +102,7 @@ export function Footer() {
               Trimwork
             </Link>
             <p className="text-sm text-[var(--stone)]/60 mt-2 max-w-xs">
-              AI junior tax accountants custom-built for your firm.
+              AI junior accountants custom-built for your firm.
             </p>
           </div>
           <div className="flex flex-wrap gap-10 sm:gap-16">

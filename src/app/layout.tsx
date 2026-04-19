@@ -16,7 +16,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Trimwork — AI Junior Accountants for Your Firm",
   description:
-    "We build AI junior tax accountants custom-fit to your firm. First month free.",
+    "We build AI junior accountants custom-fit to your firm. First month free.",
   metadataBase: new URL("https://trimwork.org"),
   icons: {
     icon: "/dark_no_bg.png",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Trimwork — AI Junior Accountants for Your Firm",
-    description: "We build AI junior tax accountants custom-fit to your firm. First month free.",
+    description: "We build AI junior accountants custom-fit to your firm. First month free.",
     url: "https://trimwork.org",
     siteName: "Trimwork",
     type: "website",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Trimwork — AI Junior Accountants for Your Firm",
-    description: "We build AI junior tax accountants custom-fit to your firm. First month free.",
+    description: "We build AI junior accountants custom-fit to your firm. First month free.",
     images: ["/og.png"],
   },
   robots: {

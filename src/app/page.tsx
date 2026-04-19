@@ -218,11 +218,11 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.07] tracking-tight mb-6">
               <span className="text-[var(--forest-dark)]">The best Junior Accountant on Earth</span>
               <br />
-              <span className="text-[var(--forest-light)]">Works for free.</span>
+              <span className="text-[var(--forest-light)]">Never clocks out.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-[var(--stone)] leading-relaxed max-w-xl mb-10">
-              We build AI junior tax accountants custom-fit to your firm.
+              We build AI junior accountants custom-fit to your firm.
               They handle the prep work so your senior staff can focus on advisory.
             </p>
 
